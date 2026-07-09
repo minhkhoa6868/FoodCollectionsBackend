@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/FoodCollectionsBackend.API/FoodCollectionsBackend.API.csproj" />
+    <Project Path="src/FoodCollectionsBackend.Application/FoodCollectionsBackend.Application.csproj" />
+    <Project Path="src/FoodCollectionsBackend.Domain/FoodCollectionsBackend.Domain.csproj" />
+    <Project Path="src/FoodCollectionsBackend.Infrastructure/FoodCollectionsBackend.Infrastructure.csproj" />
+  </Folder>
+</Solution>
