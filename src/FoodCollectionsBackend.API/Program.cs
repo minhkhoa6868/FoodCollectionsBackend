@@ -7,6 +7,7 @@ using Scalar.AspNetCore;
 using FluentValidation;
 using FoodCollectionsBackend.Application;
 using FoodCollectionsBackend.API.Middleware;
+using FoodCollectionsBackend.Infrastructure;
 
 Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()
@@ -55,7 +56,7 @@ try
 
     builder.Services.AddApplication();
 
-    // builder.Services.AddInfrastructure(builder.Configuration);
+    builder.Services.AddInfrastructure(builder.Configuration);
 
     // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
     builder.Services.AddOpenApi();
@@ -92,7 +93,7 @@ try
 
     app.Run();
 }
-catch (Exception ex)
+catch (Exception ex) when (ex is not HostAbortedException)
 {
     Log.Error(ex, "Stopped program because of exception");
     throw;

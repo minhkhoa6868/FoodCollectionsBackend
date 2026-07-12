@@ -492,3 +492,5 @@ $RECYCLE.BIN/
 
 # macOS
 .DS_Store
+
+appsettings.Development.json
