@@ -1,17 +1,17 @@
 using Serilog;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Reflection.Metadata;
+using System.Reflection;
 using System.Text;
-using Scalar.AspNetCore;
-using FluentValidation;
 using FoodCollectionsBackend.Application;
 using FoodCollectionsBackend.API.Middleware;
 using FoodCollectionsBackend.Infrastructure;
+using Microsoft.OpenApi;
 
 Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()
             .Enrich.FromLogContext()
+            .WriteTo.Console()
             .CreateBootstrapLogger();
 
 Log.Information("API Starting up!");
@@ -58,8 +58,7 @@ try
 
     builder.Services.AddInfrastructure(builder.Configuration);
 
-    // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-    builder.Services.AddOpenApi();
+    builder.Services.AddHttpContextAccessor();
 
     builder.Services.AddCors(options =>
     {
@@ -72,6 +71,36 @@ try
         });
     });
 
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen(options =>
+    {
+        var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+        options.IncludeXmlComments(xmlPath);
+
+        // JWT Authentication
+        options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+        {
+            Name = "Authorization",
+            Type = SecuritySchemeType.Http,
+            Scheme = "bearer",
+            BearerFormat = "JWT",
+            In = ParameterLocation.Header,
+            Description = "Enter JWT Token only"
+        });
+
+        options.AddSecurityRequirement(document =>
+        {
+            return new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecuritySchemeReference("Bearer", document),
+                    new List<string>()
+                }
+            };
+        });
+    });
+
     var app = builder.Build();
 
     app.UseMiddleware<ExceptionHandlingMiddleware>();
@@ -79,9 +108,9 @@ try
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {
-        app.MapOpenApi();
-        app.MapScalarApiReference();
         app.UseCors("corsapp");
+        app.UseSwagger();
+        app.UseSwaggerUI();
     }
 
     app.UseHttpsRedirection();

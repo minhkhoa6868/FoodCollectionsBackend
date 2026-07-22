@@ -17,16 +17,18 @@ namespace FoodCollectionsBackend.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    FullName = table.Column<string>(type: "text", nullable: true),
+                    FirstName = table.Column<string>(type: "text", nullable: true),
+                    LastName = table.Column<string>(type: "text", nullable: true),
                     Username = table.Column<string>(type: "text", nullable: true),
                     Email = table.Column<string>(type: "text", nullable: true),
                     PasswordHash = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "text", nullable: true),
+                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DeletedBy = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -43,11 +45,12 @@ namespace FoodCollectionsBackend.Infrastructure.Migrations
                     ColorHex = table.Column<string>(type: "text", nullable: true),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "text", nullable: true),
+                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DeletedBy = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,12 +71,12 @@ namespace FoodCollectionsBackend.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Token = table.Column<string>(type: "text", nullable: true),
                     ExpiresAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    RevokedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    RevokedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "text", nullable: true)
+                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -105,11 +108,12 @@ namespace FoodCollectionsBackend.Infrastructure.Migrations
                     Notes = table.Column<string>(type: "text", nullable: true),
                     CategoryId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "text", nullable: true),
+                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DeletedBy = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -130,9 +134,9 @@ namespace FoodCollectionsBackend.Infrastructure.Migrations
                     ImageUrl = table.Column<string>(type: "text", nullable: true),
                     FoodRecordId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "text", nullable: true)
+                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
