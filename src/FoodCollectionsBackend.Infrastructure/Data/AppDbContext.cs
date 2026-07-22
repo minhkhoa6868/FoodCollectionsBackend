@@ -1,11 +1,18 @@
 using Microsoft.EntityFrameworkCore;
 using FoodCollectionsBackend.Domain.Entities;
 using FoodCollectionsBackend.Domain.Common;
+using FoodCollectionsBackend.Application.Interfaces.Data;
+using FoodCollectionsBackend.Application.Interfaces;
 namespace FoodCollectionsBackend.Infrastructure.Data;
 
-public class AppDbContext : DbContext
+public class AppDbContext : DbContext, IAppDbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+    private readonly ICurrentUser _currentUser;
+
+    public AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUser currentUser) : base(options)
+    {
+        _currentUser = currentUser;
+    }
 
     public DbSet<User> Users => Set<User>();
     public DbSet<Category> Categories => Set<Category>();
@@ -36,6 +43,7 @@ public class AppDbContext : DbContext
             {
                 case EntityState.Added:
                     entry.Entity.CreatedAt = DateTime.UtcNow;
+                    entry.Entity.CreatedBy = _currentUser.UserId;
                     break;
 
                 case EntityState.Modified:
@@ -43,6 +51,7 @@ public class AppDbContext : DbContext
                         .IsModified = false;
 
                     entry.Entity.UpdatedAt = DateTime.UtcNow;
+                    entry.Entity.UpdatedBy = _currentUser.UserId;
                     break;
             }
         }
@@ -55,6 +64,7 @@ public class AppDbContext : DbContext
 
                 entry.Entity.IsDeleted = true;
                 entry.Entity.DeletedAt = DateTime.UtcNow;
+                entry.Entity.DeletedBy = _currentUser.UserId;
             }
         }
 
