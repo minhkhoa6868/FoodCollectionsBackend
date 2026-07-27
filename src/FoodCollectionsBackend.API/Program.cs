@@ -1,12 +1,13 @@
 using Serilog;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Reflection;
 using System.Text;
 using FoodCollectionsBackend.Application;
 using FoodCollectionsBackend.API.Middleware;
 using FoodCollectionsBackend.Infrastructure;
 using Microsoft.OpenApi;
+using Scalar.AspNetCore;
+using FoodCollectionsBackend.API.Extensions;
 
 Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()
@@ -71,35 +72,37 @@ try
         });
     });
 
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen(options =>
-    {
-        var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-        options.IncludeXmlComments(xmlPath);
+    // builder.Services.AddEndpointsApiExplorer();
+    // builder.Services.AddSwaggerGen(options =>
+    // {
+    //     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    //     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    //     options.IncludeXmlComments(xmlPath);
 
-        // JWT Authentication
-        options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-        {
-            Name = "Authorization",
-            Type = SecuritySchemeType.Http,
-            Scheme = "bearer",
-            BearerFormat = "JWT",
-            In = ParameterLocation.Header,
-            Description = "Enter JWT Token only"
-        });
+    //     // JWT Authentication
+    //     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    //     {
+    //         Name = "Authorization",
+    //         Type = SecuritySchemeType.Http,
+    //         Scheme = "bearer",
+    //         BearerFormat = "JWT",
+    //         In = ParameterLocation.Header,
+    //         Description = "Enter JWT Token only"
+    //     });
 
-        options.AddSecurityRequirement(document =>
-        {
-            return new OpenApiSecurityRequirement
-            {
-                {
-                    new OpenApiSecuritySchemeReference("Bearer", document),
-                    new List<string>()
-                }
-            };
-        });
-    });
+    //     options.AddSecurityRequirement(document =>
+    //     {
+    //         return new OpenApiSecurityRequirement
+    //         {
+    //             {
+    //                 new OpenApiSecuritySchemeReference("Bearer", document),
+    //                 new List<string>()
+    //             }
+    //         };
+    //     });
+    // });
+
+    builder.Services.AddOpenApiConfiguration();
 
     var app = builder.Build();
 
@@ -109,8 +112,8 @@ try
     if (app.Environment.IsDevelopment())
     {
         app.UseCors("corsapp");
-        app.UseSwagger();
-        app.UseSwaggerUI();
+        // app.UseSwagger();
+        // app.UseSwaggerUI();
     }
 
     app.UseHttpsRedirection();
@@ -119,6 +122,8 @@ try
     app.UseAuthorization();
 
     app.MapControllers();
+
+    app.UseOpenApiConfiguration();
 
     app.Run();
 }

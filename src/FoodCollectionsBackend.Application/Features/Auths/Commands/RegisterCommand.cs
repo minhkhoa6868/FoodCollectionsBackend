@@ -1,4 +1,5 @@
 using FoodCollectionsBackend.Application.Common.Models;
+using FoodCollectionsBackend.Application.Interfaces.Auths;
 using FoodCollectionsBackend.Application.Models.Users;
 using FluentValidation;
 namespace FoodCollectionsBackend.Application.Features.Auths.Commands;
@@ -33,5 +34,16 @@ public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
             .NotEmpty().WithMessage("Password is required.")
             .MinimumLength(8).WithMessage("Password must be at least 8 characters long.")
             .Matches(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).+$").WithMessage("Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+    }
+}
+
+public class RegisterCommandHandler(IAuthCommandService authCommandService)
+    : IRequestHandler<RegisterCommand, Result<UserResponse>>
+{
+    public async Task<Result<UserResponse>> Handle(
+        RegisterCommand request,
+        CancellationToken cancellationToken)
+    {
+        return await authCommandService.RegisterAsync(request, cancellationToken);
     }
 }
