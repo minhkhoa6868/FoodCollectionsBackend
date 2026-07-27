@@ -1,4 +1,5 @@
 using FoodCollectionsBackend.Application.Common.Models;
+using FoodCollectionsBackend.Application.Interfaces.Auths;
 using FoodCollectionsBackend.Application.Models.Auths;
 using FluentValidation;
 
@@ -18,5 +19,16 @@ public class LoginCommandValidator : AbstractValidator<LoginCommand>
 
         RuleFor(x => x.Password)
             .NotEmpty().WithMessage("Password is required.");
+    }
+}
+
+public class LoginCommandHandler(IAuthCommandService authCommandService)
+    : IRequestHandler<LoginCommand, Result<LoginResponse>>
+{
+    public async Task<Result<LoginResponse>> Handle(
+        LoginCommand request,
+        CancellationToken cancellationToken)
+    {
+        return await authCommandService.LoginAsync(request, cancellationToken);
     }
 }

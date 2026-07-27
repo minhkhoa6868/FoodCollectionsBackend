@@ -23,6 +23,7 @@ public class AuthController(IMediator mediator) : ControllerBase
     /// <param name="command"></param>
     /// <returns></returns>
     [HttpPost("login")]
+    [EndpointDescription("Login with username and password")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(Result<LoginResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -39,6 +40,7 @@ public class AuthController(IMediator mediator) : ControllerBase
     /// <param name="command"></param>
     /// <returns></returns>
     [HttpPost("logout")]
+    [EndpointDescription("Logout the current user")]
     [Authorize]
     [ProducesResponseType(typeof(Result), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -55,6 +57,7 @@ public class AuthController(IMediator mediator) : ControllerBase
     /// <param name="command"></param>
     /// <returns></returns>
     [HttpPost("refresh-token")]
+    [EndpointDescription("Refresh the access token using a refresh token")]
     [Authorize]
     [ProducesResponseType(typeof(Result<LoginResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -72,6 +75,7 @@ public class AuthController(IMediator mediator) : ControllerBase
     /// <param name="command"></param>
     /// <returns></returns>
     [HttpPost("register")]
+    [EndpointDescription("Register a new user")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(Result<UserResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
