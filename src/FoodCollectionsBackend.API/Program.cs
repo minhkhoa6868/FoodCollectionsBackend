@@ -1,6 +1,7 @@
 using Serilog;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Text.Json.Serialization;
 using System.Text;
 using FoodCollectionsBackend.Application;
 using FoodCollectionsBackend.API.Middleware;
@@ -53,7 +54,11 @@ try
     // Require to use [Authorize] attributes
     builder.Services.AddAuthorization();
 
-    builder.Services.AddControllers();
+    builder.Services.AddControllers()
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
 
     builder.Services.AddApplication();
 
@@ -70,6 +75,11 @@ try
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
+    });
+
+    builder.Services.ConfigureHttpJsonOptions(options =>
+    {
+        options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
     // builder.Services.AddEndpointsApiExplorer();

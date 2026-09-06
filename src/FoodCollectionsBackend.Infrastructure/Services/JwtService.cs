@@ -1,5 +1,4 @@
 using FoodCollectionsBackend.Application.Interfaces;
-using FoodCollectionsBackend.Application.Models.Auths;
 using FoodCollectionsBackend.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -8,6 +7,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using FoodCollectionsBackend.Application.Common.Models;
+using FoodCollectionsBackend.Application.Features.Auths.Models;
 namespace FoodCollectionsBackend.Infrastructure.Services;
 
 public class JwtService(IConfiguration configuration) : IJwtService

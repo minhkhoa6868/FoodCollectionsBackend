@@ -1,7 +1,7 @@
-using FoodCollectionsBackend.Application.Models.Auths;
 using FoodCollectionsBackend.Application.Common.Models;
 using FluentValidation;
 using FoodCollectionsBackend.Application.Interfaces.Auths;
+using FoodCollectionsBackend.Application.Features.Auths.Models;
 namespace FoodCollectionsBackend.Application.Features.Auths.Commands;
 
 public sealed record RefreshAccessTokenCommand(
@@ -20,10 +20,6 @@ public class RefreshAccessTokenCommandValidator : AbstractValidator<RefreshAcces
 public class RefreshAccessTokenCommandHandler(IAuthCommandService authCommandService)
     : IRequestHandler<RefreshAccessTokenCommand, Result<LoginResponse>>
 {
-    public async Task<Result<LoginResponse>> Handle(
-        RefreshAccessTokenCommand request,
-        CancellationToken cancellationToken)
-    {
-        return await authCommandService.RefreshAccessTokenAsync(request, cancellationToken);
-    }
+    public async Task<Result<LoginResponse>> Handle(RefreshAccessTokenCommand request, CancellationToken cancellationToken)
+    => await authCommandService.RefreshAccessTokenAsync(request, cancellationToken);
 }

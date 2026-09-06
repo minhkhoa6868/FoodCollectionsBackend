@@ -1,4 +1,4 @@
-namespace FoodCollectionsBackend.Application.Models.Users;
+namespace FoodCollectionsBackend.Application.Features.Users.Models;
 
 public class UserResponse
 {

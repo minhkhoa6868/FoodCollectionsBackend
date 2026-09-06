@@ -1,7 +1,7 @@
 using FoodCollectionsBackend.Application.Common.Models;
 using FoodCollectionsBackend.Application.Interfaces.Auths;
-using FoodCollectionsBackend.Application.Models.Users;
 using FluentValidation;
+using FoodCollectionsBackend.Application.Features.Users.Models;
 namespace FoodCollectionsBackend.Application.Features.Auths.Commands;
 
 public sealed record RegisterCommand(
@@ -40,10 +40,6 @@ public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
 public class RegisterCommandHandler(IAuthCommandService authCommandService)
     : IRequestHandler<RegisterCommand, Result<UserResponse>>
 {
-    public async Task<Result<UserResponse>> Handle(
-        RegisterCommand request,
-        CancellationToken cancellationToken)
-    {
-        return await authCommandService.RegisterAsync(request, cancellationToken);
-    }
+    public async Task<Result<UserResponse>> Handle(RegisterCommand request, CancellationToken cancellationToken)
+    => await authCommandService.RegisterAsync(request, cancellationToken);
 }
