@@ -1,12 +1,12 @@
-using Microsoft.AspNetCore.Mvc;
-using MediatR;
-using Serilog;
-using FoodCollectionsBackend.Application.Features.Auths.Commands;
-using FoodCollectionsBackend.Application.Common.Models;
-using FoodCollectionsBackend.Application.Models.Auths;
-using Microsoft.AspNetCore.Authorization;
-using FoodCollectionsBackend.Application.Models.Users;
 using System.ComponentModel;
+using FoodCollectionsBackend.Application.Common.Models;
+using FoodCollectionsBackend.Application.Features.Auths.Commands;
+using FoodCollectionsBackend.Application.Features.Auths.Models;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Serilog;
+using FoodCollectionsBackend.Application.Features.Users.Models;
 namespace FoodCollectionsBackend.API.Controller;
 
 [ApiController]
@@ -15,10 +15,6 @@ public class AuthController(IMediator mediator) : ControllerBase
 {
     /// <summary>
     /// Login with username and password
-    /// </summary>
-    /// <param name="command"></param>
-    /// <returns></returns> <summary>
-    /// 
     /// </summary>
     /// <param name="command"></param>
     /// <returns></returns>
@@ -81,6 +77,54 @@ public class AuthController(IMediator mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> Register(RegisterCommand command)
+    {
+        var result = await mediator.Send(command);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Send OTP to the user's email for verification
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    [HttpPost("send-otp")]
+    [EndpointDescription("Send OTP to the user's email")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> SendOtp(SendOtpCommand command)
+    {
+        var result = await mediator.Send(command);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Verify OTP for the user's email
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    [HttpPost("verify-otp")]
+    [EndpointDescription("Verify OTP for the user's email")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> VerifyOtp(VerifiedOtpCommand command)
+    {
+        var result = await mediator.Send(command);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Reset password
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    [HttpPost("reset-password")]
+    [EndpointDescription("Reset user password")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(Result), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ResetPassword(ResetPasswordCommand command)
     {
         var result = await mediator.Send(command);
         return Ok(result);

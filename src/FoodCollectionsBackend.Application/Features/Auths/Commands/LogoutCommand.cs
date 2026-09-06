@@ -19,10 +19,6 @@ public class LogoutCommandValidator : AbstractValidator<LogoutCommand>
 public class LogoutCommandHandler(IAuthCommandService authCommandService)
     : IRequestHandler<LogoutCommand, Result>
 {
-    public async Task<Result> Handle(
-        LogoutCommand request,
-        CancellationToken cancellationToken)
-    {
-        return await authCommandService.LogoutAsync(request, cancellationToken);
-    }
+    public async Task<Result> Handle(LogoutCommand request, CancellationToken cancellationToken)
+    => await authCommandService.LogoutAsync(request, cancellationToken);
 }

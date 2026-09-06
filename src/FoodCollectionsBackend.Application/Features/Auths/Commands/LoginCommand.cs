@@ -1,7 +1,8 @@
 using FoodCollectionsBackend.Application.Common.Models;
 using FoodCollectionsBackend.Application.Interfaces.Auths;
-using FoodCollectionsBackend.Application.Models.Auths;
 using FluentValidation;
+using System.Reflection.Metadata;
+using FoodCollectionsBackend.Application.Features.Auths.Models;
 
 namespace FoodCollectionsBackend.Application.Features.Auths.Commands;
 
@@ -25,10 +26,6 @@ public class LoginCommandValidator : AbstractValidator<LoginCommand>
 public class LoginCommandHandler(IAuthCommandService authCommandService)
     : IRequestHandler<LoginCommand, Result<LoginResponse>>
 {
-    public async Task<Result<LoginResponse>> Handle(
-        LoginCommand request,
-        CancellationToken cancellationToken)
-    {
-        return await authCommandService.LoginAsync(request, cancellationToken);
-    }
+    public async Task<Result<LoginResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
+    => await authCommandService.LoginAsync(request, cancellationToken);
 }

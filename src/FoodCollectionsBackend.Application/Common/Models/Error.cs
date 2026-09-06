@@ -1,37 +1,44 @@
+using FoodCollectionsBackend.Application.Common.Enum;
+
 namespace FoodCollectionsBackend.Application.Common.Models;
 
 public class Error
 {
-    public string? Code { get; set; }
+    public ErrorCode Code { get; set; }
     public string? Message { get; set; }
 
-    public static Error None => new();
+    public static Error None
+        => new()
+        {
+            Code = ErrorCode.None,
+            Message = string.Empty
+        };
 
     public static Error NotFound(string message)
         => new()
         {
-            Code = "NotFound",
+            Code = ErrorCode.NotFound,
             Message = message
         };
 
-    public static Error Validation(string message)
+    public static Error Invalid(string message)
         => new()
         {
-            Code = "Validation",
+            Code = ErrorCode.Invalid,
             Message = message
         };
 
     public static Error Unauthorized(string message)
         => new()
         {
-            Code = "Unauthorized",
+            Code = ErrorCode.Unauthorized,
             Message = message
         };
 
     public static Error Conflict(string message)
         => new()
         {
-            Code = "Conflict",
+            Code = ErrorCode.Conflict,
             Message = message
         };
 }

@@ -1,4 +1,4 @@
-namespace FoodCollectionsBackend.Application.Models.Auths;
+namespace FoodCollectionsBackend.Application.Features.Auths.Models;
 
 public class LoginResponse
 {
