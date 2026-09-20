@@ -11,6 +11,8 @@ using FoodCollectionsBackend.Infrastructure.Services.Auths;
 using FoodCollectionsBackend.Application.Common.Models;
 using FoodCollectionsBackend.Application.Interfaces.Users;
 using FoodCollectionsBackend.Infrastructure.Services.Users;
+using FoodCollectionsBackend.Application.Interfaces.Categories;
+using FoodCollectionsBackend.Infrastructure.Services.Categories;
 namespace FoodCollectionsBackend.Infrastructure;
 
 public static class DependencyInjection
@@ -56,6 +58,10 @@ public static class DependencyInjection
         // User Service
         services.AddScoped<IUserCommandService, UserCommandService>();
         services.AddScoped<IUserQueryService, UserQueryService>();
+
+        // Category Service
+        services.AddScoped<ICategoryCommandService, CategoryCommandService>();
+        services.AddScoped<ICategoryQueryService, CategoryQueryService>();
 
         return services;
     }
