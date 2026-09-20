@@ -2,6 +2,7 @@ using FoodCollectionsBackend.Application.Common.Models;
 using FluentValidation;
 using FoodCollectionsBackend.Application.Interfaces.Auths;
 using FoodCollectionsBackend.Application.Features.Auths.Models;
+using MediatR;
 namespace FoodCollectionsBackend.Application.Features.Auths.Commands;
 
 public sealed record RefreshAccessTokenCommand(

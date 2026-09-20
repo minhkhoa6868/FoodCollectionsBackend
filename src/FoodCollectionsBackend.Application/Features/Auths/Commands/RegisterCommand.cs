@@ -2,6 +2,7 @@ using FoodCollectionsBackend.Application.Common.Models;
 using FoodCollectionsBackend.Application.Interfaces.Auths;
 using FluentValidation;
 using FoodCollectionsBackend.Application.Features.Users.Models;
+using MediatR;
 namespace FoodCollectionsBackend.Application.Features.Auths.Commands;
 
 public sealed record RegisterCommand(

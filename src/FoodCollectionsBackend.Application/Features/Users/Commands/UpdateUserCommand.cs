@@ -2,6 +2,7 @@ using System.Data;
 using FluentValidation;
 using FoodCollectionsBackend.Application.Common.Models;
 using FoodCollectionsBackend.Application.Interfaces.Users;
+using MediatR;
 namespace FoodCollectionsBackend.Application.Features.Users.Commands;
 
 public sealed record UpdateUserCommand(

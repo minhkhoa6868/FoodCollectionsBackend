@@ -1,6 +1,7 @@
 using FoodCollectionsBackend.Application.Common.Models;
 using FoodCollectionsBackend.Application.Features.Users.Models;
 using FoodCollectionsBackend.Application.Interfaces.Users;
+using MediatR;
 
 namespace FoodCollectionsBackend.Application.Features.Users.Queries;
 

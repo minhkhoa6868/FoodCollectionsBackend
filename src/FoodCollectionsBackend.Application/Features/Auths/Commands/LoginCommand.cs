@@ -3,6 +3,7 @@ using FoodCollectionsBackend.Application.Interfaces.Auths;
 using FluentValidation;
 using System.Reflection.Metadata;
 using FoodCollectionsBackend.Application.Features.Auths.Models;
+using MediatR;
 
 namespace FoodCollectionsBackend.Application.Features.Auths.Commands;
 

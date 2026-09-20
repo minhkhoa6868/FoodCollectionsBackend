@@ -1,6 +1,7 @@
 using FluentValidation;
 using FoodCollectionsBackend.Application.Common.Models;
 using FoodCollectionsBackend.Application.Interfaces.Auths;
+using MediatR;
 using System.Data;
 namespace FoodCollectionsBackend.Application.Features.Auths.Commands;
 

@@ -1,6 +1,7 @@
 using FoodCollectionsBackend.Application.Common.Models;
 using FluentValidation;
 using FoodCollectionsBackend.Application.Interfaces.Auths;
+using MediatR;
 namespace FoodCollectionsBackend.Application.Features.Auths.Commands;
 
 public sealed record SendOtpCommand(string Email) : IRequest<Result>;
