@@ -9,7 +9,9 @@ using FoodCollectionsBackend.Application.Features.Users.Queries;
 namespace FoodCollectionsBackend.API.Controller;
 
 [ApiController]
+[Authorize]
 [Route("api/users")]
+
 public class UserController(IMediator mediator) : ControllerBase
 {
     /// <summary>
@@ -19,7 +21,6 @@ public class UserController(IMediator mediator) : ControllerBase
     /// <returns></returns>
     [HttpGet("{id}")]
     [EndpointDescription("Get user by id")]
-    [Authorize]
     [ProducesResponseType(typeof(Result<UserResponse?>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -37,7 +38,6 @@ public class UserController(IMediator mediator) : ControllerBase
     /// <returns></returns>
     [HttpPut]
     [EndpointDescription("Update user profile")]
-    [Authorize]
     [ProducesResponseType(typeof(Result<UserResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]

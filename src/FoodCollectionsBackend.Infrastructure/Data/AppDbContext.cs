@@ -5,15 +5,8 @@ using FoodCollectionsBackend.Application.Interfaces.Data;
 using FoodCollectionsBackend.Application.Interfaces;
 namespace FoodCollectionsBackend.Infrastructure.Data;
 
-public class AppDbContext : DbContext, IAppDbContext
+public class AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUser currentUser) : DbContext(options), IAppDbContext
 {
-    private readonly ICurrentUser _currentUser;
-
-    public AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUser currentUser) : base(options)
-    {
-        _currentUser = currentUser;
-    }
-
     public DbSet<User> Users => Set<User>();
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<FoodRecord> FoodRecords => Set<FoodRecord>();
@@ -43,7 +36,7 @@ public class AppDbContext : DbContext, IAppDbContext
             {
                 case EntityState.Added:
                     entry.Entity.CreatedAt = DateTime.UtcNow;
-                    entry.Entity.CreatedBy = _currentUser.UserId;
+                    entry.Entity.CreatedBy = currentUser.UserId;
                     break;
 
                 case EntityState.Modified:
@@ -51,7 +44,7 @@ public class AppDbContext : DbContext, IAppDbContext
                         .IsModified = false;
 
                     entry.Entity.UpdatedAt = DateTime.UtcNow;
-                    entry.Entity.UpdatedBy = _currentUser.UserId;
+                    entry.Entity.UpdatedBy = currentUser.UserId;
                     break;
             }
         }
@@ -64,7 +57,7 @@ public class AppDbContext : DbContext, IAppDbContext
 
                 entry.Entity.IsDeleted = true;
                 entry.Entity.DeletedAt = DateTime.UtcNow;
-                entry.Entity.DeletedBy = _currentUser.UserId;
+                entry.Entity.DeletedBy = currentUser.UserId;
             }
         }
 
