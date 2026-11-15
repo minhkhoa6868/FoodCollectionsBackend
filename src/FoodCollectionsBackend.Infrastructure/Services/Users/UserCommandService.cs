@@ -21,13 +21,20 @@ public class UserCommandService(IAppDbContext context, ICacheService cacheServic
         if (user == null)
             return Result.FailResult(Error.NotFound("User not found"));
 
-        user.FirstName = request.FirstName?.Trim();
-        user.LastName = request.LastName?.Trim();
+        if (!string.IsNullOrWhiteSpace(request.FirstName) && user.FirstName != request.FirstName.Trim())
+        {
+            user.FirstName = request.FirstName.Trim();
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.LastName) && user.LastName != request.LastName.Trim())
+        {
+            user.LastName = request.LastName.Trim();
+        }
 
         try
         {
             await context.SaveChangesAsync(cancellationToken);
-            await cacheService.RemoveAsync($"user:{user.Id}", cancellationToken);
+            await cacheService.RemoveAsync($"User_{user.Id}", cancellationToken);
             return Result.SuccessResult();
         }
         catch (Exception ex)

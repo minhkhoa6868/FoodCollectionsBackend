@@ -6,6 +6,7 @@ using FoodCollectionsBackend.Application.Common.Models;
 using FoodCollectionsBackend.Application.Features.Categories.Queries;
 using Microsoft.EntityFrameworkCore;
 using FoodCollectionsBackend.Application.Common.Extentions;
+using Mapster;
 namespace FoodCollectionsBackend.Infrastructure.Services.Categories;
 
 public class CategoryQueryService(
@@ -44,13 +45,7 @@ public class CategoryQueryService(
                 request.SortDirection,
                 "CategoryName",
                 ["CategoryName", "Description", "ColorHex"])
-            .Select(c => new CategoryResponse
-            {
-                Id = c.Id,
-                CategoryName = c.CategoryName,
-                Description = c.Description,
-                ColorHex = c.ColorHex
-            });
+            .ProjectToType<CategoryResponse>();
 
         var result = await PaginationResponse<CategoryResponse>.ToPagedResultAsync(
             categories,
@@ -92,17 +87,11 @@ public class CategoryQueryService(
             return Result<CategoryResponse?>.FailResult(Error.NotFound("Category not found."));
         }
 
-        var categoryResponse = new CategoryResponse
-        {
-            Id = category.Id,
-            CategoryName = category.CategoryName,
-            Description = category.Description,
-            ColorHex = category.ColorHex
-        };
+        var response = category.Adapt<CategoryResponse>();
 
         // Cache the result
-        await cacheService.SetAsync(cacheKey, categoryResponse, TimeSpan.FromMinutes(30), cancellationToken);
+        await cacheService.SetAsync(cacheKey, response, TimeSpan.FromMinutes(30), cancellationToken);
 
-        return Result<CategoryResponse?>.SuccessResult(categoryResponse);
+        return Result<CategoryResponse?>.SuccessResult(response);
     }
 }

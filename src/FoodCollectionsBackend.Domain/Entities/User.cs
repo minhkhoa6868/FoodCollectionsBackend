@@ -11,8 +11,8 @@ public class User : SoftDeletableEntity
     public string? PasswordHash { get; set; }
 
     // One-to-Many relationship with Category
-    public ICollection<Category>? Categories { get; set; }
+    public ICollection<Category> Categories { get; set; } = [];
 
     // One-to-Many relationship with RefreshToken
-    public ICollection<RefreshToken>? RefreshTokens { get; set; }
+    public ICollection<RefreshToken> RefreshTokens { get; set; } = [];
 }

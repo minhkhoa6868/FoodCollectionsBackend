@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FoodCollectionsBackend.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260721152110_InitialCreate")]
+    [Migration("20261115161701_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -108,12 +108,6 @@ namespace FoodCollectionsBackend.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Address")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uuid");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -132,32 +126,20 @@ namespace FoodCollectionsBackend.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<bool>("IsVisited")
+                    b.Property<bool?>("IsTried")
                         .HasColumnType("boolean");
-
-                    b.Property<decimal>("Latitude")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("Longitude")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("MaxPrice")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("MinPrice")
-                        .HasColumnType("numeric");
 
                     b.Property<string>("Notes")
                         .HasColumnType("text");
 
-                    b.Property<string>("PlaceId")
-                        .HasColumnType("text");
-
-                    b.Property<decimal>("Rating")
+                    b.Property<decimal?>("Price")
                         .HasColumnType("numeric");
 
-                    b.Property<string>("RestaurantName")
-                        .HasColumnType("text");
+                    b.Property<decimal?>("Rating")
+                        .HasColumnType("numeric");
+
+                    b.Property<Guid>("RestaurantId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -165,12 +147,9 @@ namespace FoodCollectionsBackend.Infrastructure.Migrations
                     b.Property<Guid?>("UpdatedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("VisitedDate")
-                        .HasColumnType("timestamp with time zone");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("RestaurantId");
 
                     b.ToTable("FoodRecords");
                 });
@@ -212,6 +191,73 @@ namespace FoodCollectionsBackend.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("RefreshTokens");
+                });
+
+            modelBuilder.Entity("FoodCollectionsBackend.Domain.Entities.Restaurant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool?>("IsVisited")
+                        .HasColumnType("boolean");
+
+                    b.Property<decimal?>("Latitude")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("Longitude")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("MaxPrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("MinPrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PlaceId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RestaurantName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("VisitedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Restaurants");
                 });
 
             modelBuilder.Entity("FoodCollectionsBackend.Domain.Entities.User", b =>
@@ -285,13 +331,13 @@ namespace FoodCollectionsBackend.Infrastructure.Migrations
 
             modelBuilder.Entity("FoodCollectionsBackend.Domain.Entities.FoodRecord", b =>
                 {
-                    b.HasOne("FoodCollectionsBackend.Domain.Entities.Category", "Category")
+                    b.HasOne("FoodCollectionsBackend.Domain.Entities.Restaurant", "Restaurant")
                         .WithMany("FoodRecords")
-                        .HasForeignKey("CategoryId")
+                        .HasForeignKey("RestaurantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("Restaurant");
                 });
 
             modelBuilder.Entity("FoodCollectionsBackend.Domain.Entities.RefreshToken", b =>
@@ -305,14 +351,30 @@ namespace FoodCollectionsBackend.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("FoodCollectionsBackend.Domain.Entities.Restaurant", b =>
+                {
+                    b.HasOne("FoodCollectionsBackend.Domain.Entities.Category", "Category")
+                        .WithMany("Restaurants")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("FoodCollectionsBackend.Domain.Entities.Category", b =>
                 {
-                    b.Navigation("FoodRecords");
+                    b.Navigation("Restaurants");
                 });
 
             modelBuilder.Entity("FoodCollectionsBackend.Domain.Entities.FoodRecord", b =>
                 {
                     b.Navigation("FoodImages");
+                });
+
+            modelBuilder.Entity("FoodCollectionsBackend.Domain.Entities.Restaurant", b =>
+                {
+                    b.Navigation("FoodRecords");
                 });
 
             modelBuilder.Entity("FoodCollectionsBackend.Domain.Entities.User", b =>

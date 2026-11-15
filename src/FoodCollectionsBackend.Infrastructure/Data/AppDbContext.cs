@@ -7,11 +7,12 @@ namespace FoodCollectionsBackend.Infrastructure.Data;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUser currentUser) : DbContext(options), IAppDbContext
 {
-    public DbSet<User> Users => Set<User>();
-    public DbSet<Category> Categories => Set<Category>();
-    public DbSet<FoodRecord> FoodRecords => Set<FoodRecord>();
-    public DbSet<FoodImage> FoodImages => Set<FoodImage>();
-    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+    public virtual DbSet<User> Users => Set<User>();
+    public virtual DbSet<Category> Categories => Set<Category>();
+    public virtual DbSet<FoodRecord> FoodRecords => Set<FoodRecord>();
+    public virtual DbSet<FoodImage> FoodImages => Set<FoodImage>();
+    public virtual DbSet<Restaurant> Restaurants => Set<Restaurant>();
+    public virtual DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

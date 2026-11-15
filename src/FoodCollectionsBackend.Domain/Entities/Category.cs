@@ -12,6 +12,7 @@ public class Category : SoftDeletableEntity
     public Guid UserId { get; set; }
     public User? User { get; set; }
 
-    // One-to-Many relationship with FoodRecord
-    public ICollection<FoodRecord>? FoodRecords { get; set; }
+
+    // One-to-Many relationship with Restaurant
+    public ICollection<Restaurant> Restaurants { get; set; } = [];
 }
