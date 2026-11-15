@@ -5,6 +5,7 @@ using FoodCollectionsBackend.Application.Common.Models;
 using FoodCollectionsBackend.Application.Features.Users.Models;
 using FoodCollectionsBackend.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Mapster;
 namespace FoodCollectionsBackend.Infrastructure.Services.Users;
 
 public class UserQueryService(IAppDbContext context, ICacheService cacheService) : IUserQueryService
@@ -13,7 +14,7 @@ public class UserQueryService(IAppDbContext context, ICacheService cacheService)
         GetUserByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var cacheKey = $"user:{request.Id}";
+        var cacheKey = $"User_{request.Id}";
 
         // check cache first
         var cached = await cacheService.GetAsync<UserResponse>(cacheKey, cancellationToken);
@@ -29,14 +30,7 @@ public class UserQueryService(IAppDbContext context, ICacheService cacheService)
         if (user == null)
             return Result<UserResponse?>.FailResult(Error.NotFound("User not found"));
 
-        var response = new UserResponse
-        {
-            Id = user.Id,
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Username = user.Username,
-            Email = user.Email
-        };
+        var response = user.Adapt<UserResponse>();
 
         // cache the result
         await cacheService.SetAsync(cacheKey, response, TimeSpan.FromMinutes(10), cancellationToken);

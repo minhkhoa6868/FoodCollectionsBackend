@@ -13,6 +13,10 @@ using FoodCollectionsBackend.Application.Interfaces.Users;
 using FoodCollectionsBackend.Infrastructure.Services.Users;
 using FoodCollectionsBackend.Application.Interfaces.Categories;
 using FoodCollectionsBackend.Infrastructure.Services.Categories;
+using FoodCollectionsBackend.Application.Interfaces.FoodRecords;
+using FoodCollectionsBackend.Infrastructure.Services.FoodRecords;
+using FoodCollectionsBackend.Application.Interfaces.Restaurants;
+using FoodCollectionsBackend.Infrastructure.Services.Restaurants;
 namespace FoodCollectionsBackend.Infrastructure;
 
 public static class DependencyInjection
@@ -62,6 +66,14 @@ public static class DependencyInjection
         // Category Service
         services.AddScoped<ICategoryCommandService, CategoryCommandService>();
         services.AddScoped<ICategoryQueryService, CategoryQueryService>();
+
+        // FoodRecord Service
+        services.AddScoped<IFoodRecordCommandService, FoodRecordCommandService>();
+        services.AddScoped<IFoodRecordQueryService, FoodRecordQueryService>();
+
+        // Restaurant Service
+        services.AddScoped<IRestaurantCommandService, RestaurantCommandService>();
+        services.AddScoped<IRestaurantQueryService, RestaurantQueryService>();
 
         return services;
     }

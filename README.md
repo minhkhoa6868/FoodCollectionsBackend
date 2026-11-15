@@ -140,6 +140,15 @@ dotnet restore
 
 ---
 
+## Create migration
+```bash
+dotnet ef migrations add InitialCreate \
+--project src/FoodCollectionsBackend.Infrastructure \
+--startup-project src/FoodCollectionsBackend.API
+```
+
+---
+
 ## Update database
 
 ```bash
@@ -165,6 +174,15 @@ Run PostgreSQL
 
 ```bash
 docker compose up -d
+```
+
+---
+
+# Redis
+
+```bash
+brew services start redis
+redis-cli
 ```
 
 ---

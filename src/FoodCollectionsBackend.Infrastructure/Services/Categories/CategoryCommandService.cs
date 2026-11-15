@@ -6,6 +6,7 @@ using FoodCollectionsBackend.Application.Features.Categories.Models;
 using FoodCollectionsBackend.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using FoodCollectionsBackend.Application.Interfaces;
+using Mapster;
 namespace FoodCollectionsBackend.Infrastructure.Services.Categories;
 
 public class CategoryCommandService(
@@ -33,13 +34,7 @@ public class CategoryCommandService(
         try
         {
             await context.SaveChangesAsync(cancellationToken);
-            return Result<CategoryResponse?>.SuccessResult(new CategoryResponse
-            {
-                Id = category.Id,
-                CategoryName = category.CategoryName,
-                Description = category.Description,
-                ColorHex = category.ColorHex
-            });
+            return Result<CategoryResponse?>.SuccessResult(category.Adapt<CategoryResponse>());
         }
         catch (Exception ex)
         {
@@ -84,13 +79,7 @@ public class CategoryCommandService(
         {
             await context.SaveChangesAsync(cancellationToken);
             await cacheService.RemoveAsync($"Category_{category.Id}", cancellationToken);
-            return Result<CategoryResponse?>.SuccessResult(new CategoryResponse
-            {
-                Id = category.Id,
-                CategoryName = category.CategoryName,
-                Description = category.Description,
-                ColorHex = category.ColorHex
-            });
+            return Result<CategoryResponse?>.SuccessResult(category.Adapt<CategoryResponse>());
         }
         catch (Exception ex)
         {
@@ -100,25 +89,25 @@ public class CategoryCommandService(
 
     public async Task<Result> DeleteCategoryAsync(DeleteCategoryCommand request, CancellationToken cancellationToken)
     {
+        if (currentUser?.UserId == null)
+        {
+            return Result.FailResult(Error.Unauthorized("User is not authenticated."));
+        }
+
+        var categories = await context.Categories
+            .Where(c =>
+                request.Ids.Contains(c.Id) &&
+                c.UserId == (Guid)currentUser.UserId &&
+                !c.IsDeleted)
+            .ToListAsync(cancellationToken);
+
+        if (categories.Count == 0)
+        {
+            return Result.FailResult(Error.NotFound("No categories found to delete."));
+        }
+
         try
         {
-            if (currentUser?.UserId == null)
-            {
-                return Result.FailResult(Error.Unauthorized("User is not authenticated."));
-            }
-
-            var categories = await context.Categories
-                .Where(c =>
-                    request.Ids.Contains(c.Id) &&
-                    c.UserId == (Guid)currentUser.UserId &&
-                    !c.IsDeleted)
-                .ToListAsync(cancellationToken);
-
-            if (categories.Count == 0)
-            {
-                return Result.FailResult(Error.NotFound("No categories found to delete."));
-            }
-
             context.Categories.RemoveRange(categories);
             await context.SaveChangesAsync(cancellationToken);
             foreach (var category in categories)

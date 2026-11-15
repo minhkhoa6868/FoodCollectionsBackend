@@ -8,6 +8,7 @@ using FoodCollectionsBackend.Domain.Entities;
 using FoodCollectionsBackend.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Mapster;
 namespace FoodCollectionsBackend.Infrastructure.Services.Auths;
 
 public class AuthCommandService(
@@ -182,14 +183,7 @@ public class AuthCommandService(
             context.Users.Add(user);
             await context.SaveChangesAsync(cancellationToken);
 
-            return Result<UserResponse>.SuccessResult(new UserResponse
-            {
-                Id = user.Id,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Username = user.Username,
-                Email = user.Email
-            });
+            return Result<UserResponse>.SuccessResult(user.Adapt<UserResponse>());
         }
         catch (Exception ex)
         {

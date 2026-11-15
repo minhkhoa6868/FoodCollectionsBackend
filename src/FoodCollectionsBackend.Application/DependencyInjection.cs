@@ -26,8 +26,6 @@ public static class DependencyInjection
             typeof(IPipelineBehavior<,>),
             typeof(LoggingBehavior<,>));
 
-        services.AddAutoMapper(cfg => {}, typeof(DependencyInjection).Assembly);
-
         return services;
     }
 }

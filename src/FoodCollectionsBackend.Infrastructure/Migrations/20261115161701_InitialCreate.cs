@@ -90,20 +90,18 @@ namespace FoodCollectionsBackend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FoodRecords",
+                name: "Restaurants",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    FoodName = table.Column<string>(type: "text", nullable: true),
-                    MinPrice = table.Column<decimal>(type: "numeric", nullable: false),
-                    MaxPrice = table.Column<decimal>(type: "numeric", nullable: false),
                     RestaurantName = table.Column<string>(type: "text", nullable: true),
+                    MinPrice = table.Column<decimal>(type: "numeric", nullable: true),
+                    MaxPrice = table.Column<decimal>(type: "numeric", nullable: true),
                     Address = table.Column<string>(type: "text", nullable: true),
                     PlaceId = table.Column<string>(type: "text", nullable: true),
-                    Latitude = table.Column<decimal>(type: "numeric", nullable: false),
-                    Longitude = table.Column<decimal>(type: "numeric", nullable: false),
-                    Rating = table.Column<decimal>(type: "numeric", nullable: false),
-                    IsVisited = table.Column<bool>(type: "boolean", nullable: false),
+                    Latitude = table.Column<decimal>(type: "numeric", nullable: true),
+                    Longitude = table.Column<decimal>(type: "numeric", nullable: true),
+                    IsVisited = table.Column<bool>(type: "boolean", nullable: true),
                     VisitedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Notes = table.Column<string>(type: "text", nullable: true),
                     CategoryId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -117,11 +115,41 @@ namespace FoodCollectionsBackend.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FoodRecords", x => x.Id);
+                    table.PrimaryKey("PK_Restaurants", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FoodRecords_Categories_CategoryId",
+                        name: "FK_Restaurants_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FoodRecords",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FoodName = table.Column<string>(type: "text", nullable: true),
+                    Price = table.Column<decimal>(type: "numeric", nullable: true),
+                    Rating = table.Column<decimal>(type: "numeric", nullable: true),
+                    IsTried = table.Column<bool>(type: "boolean", nullable: true),
+                    Notes = table.Column<string>(type: "text", nullable: true),
+                    RestaurantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DeletedBy = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FoodRecords", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FoodRecords_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
+                        principalTable: "Restaurants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -160,14 +188,19 @@ namespace FoodCollectionsBackend.Infrastructure.Migrations
                 column: "FoodRecordId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FoodRecords_CategoryId",
+                name: "IX_FoodRecords_RestaurantId",
                 table: "FoodRecords",
-                column: "CategoryId");
+                column: "RestaurantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RefreshTokens_UserId",
                 table: "RefreshTokens",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Restaurants_CategoryId",
+                table: "Restaurants",
+                column: "CategoryId");
         }
 
         /// <inheritdoc />
@@ -181,6 +214,9 @@ namespace FoodCollectionsBackend.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "FoodRecords");
+
+            migrationBuilder.DropTable(
+                name: "Restaurants");
 
             migrationBuilder.DropTable(
                 name: "Categories");

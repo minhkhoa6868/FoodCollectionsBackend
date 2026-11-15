@@ -9,7 +9,7 @@ public interface IAppDbContext
     DbSet<Category> Categories { get; }
     DbSet<FoodRecord> FoodRecords { get; }
     DbSet<FoodImage> FoodImages { get; }
+    DbSet<Restaurant> Restaurants { get; }
     DbSet<RefreshToken> RefreshTokens { get; }
-    Task<int> SaveChangesAsync(
-        CancellationToken cancellationToken = default);
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
